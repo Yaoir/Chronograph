@@ -1,0 +1,44 @@
+alarm(1) -- alarm clock
+=======================
+
+## SYNOPSIS
+
+`alarm` _time_ _command_
+
+## DESCRIPTION
+
+alarm(1) is an alarm clock. It runs a command at a specified time.
+
+## ARGUMENTS
+
+The first argument specifies the time the alarm clock is set to go off.
+
+The rest of the arguments are a command to run when the alarm triggers.
+
+## EXAMPLES
+
+An alarm set to play an mp3 (with the command `aplay alarmbell.mp3`) at 2:30 pm (14:30):
+
+`alarm 2:30pm aplay alarmbell.mp3`
+
+An alarm set to print "hello, world" at 9 pm (21:00):
+
+`alarm 21:00 echo "hello, world"`
+
+## BUGS
+
+The time is always shown with a 24-hour clock, even when the alarm is set with a 12-hour clock.
+
+The command must be present. Use "echo -n" as the command if you don't want a command to run.
+
+## AUTHOR
+
+Jay Ts
+(http://jayts.com)
+
+## COPYRIGHT
+
+Copyright 2018 Jay Ts
+
+Released under the GNU Public License, version 3.0 (GPLv3)
+(http://www.gnu.org/licenses/gpl.html)

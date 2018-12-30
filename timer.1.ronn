@@ -1,0 +1,44 @@
+timer(1) -- countdown timer
+===========================
+
+## SYNOPSIS
+
+`timer` _duration_ _command_
+
+## DESCRIPTION
+
+timer(1) is a countdown timer. It runs a command after a specified duration of time.
+
+## ARGUMENTS
+
+The first argument specifies the duration.
+
+The rest of the arguments are a command to run when the timer reaches 0.
+
+## EXAMPLES
+
+After 2 minutes and 30 seconds, play an mp3 (with the command `aplay alarmbell.mp3`):
+
+`timer 2m30s aplay alarmbell.mp3`
+
+An alarm set to print "hello, world" in 21 minutes:
+
+`alarm 21m echo "hello, world"`
+
+## BUGS
+
+The time is always shown with a 24-hour clock, even when the duration is set with a 12-hour clock.
+
+The command must be present. Use "echo -n" as the command if you don't want a command to run.
+
+## AUTHOR
+
+Jay Ts
+(http://jayts.com)
+
+## COPYRIGHT
+
+Copyright 2018 Jay Ts
+
+Released under the GNU Public License, version 3.0 (GPLv3)
+(http://www.gnu.org/licenses/gpl.html)
