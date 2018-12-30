@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# The --profile argument uses this profile:
+# General->Profile name: Timer
+# General->Command: /bin/bash
+# General->Columns: 13
+# General->Rows: 2
+# Appearance->Color Scheme: Black on White
+# Appearance->Font: Monospace, Text size: 24
+# Scrolling->Scroll Bar: Hide
+# Advanced->Cursor->Custom cursor color: white (#fff)
+
+kon_opts="--profile Timer --hide-menubar --hide-tabbar -p ScrollBarPosition=2 -p TerminalRows=2 -p TerminalColumns=13"
+
+konsole 2>/dev/null $kon_opts -e alarm "$@"
