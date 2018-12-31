@@ -25,6 +25,10 @@ An alarm set to print "hello, world" at 9 pm (21:00):
 
 `alarm 21:00 echo "hello, world"`
 
+Reminder to feed the cat at 10am:
+
+`alarm 10am echo feed the cat`
+
 ## BUGS
 
 The time is always shown with a 24-hour clock, even when the alarm is set with a 12-hour clock.

@@ -12,4 +12,10 @@
 
 kon_opts="--profile Timer --hide-menubar --hide-tabbar -p ScrollBarPosition=2 -p TerminalRows=2 -p TerminalColumns=13"
 
-konsole 2>/dev/null $kon_opts -e alarm "$@"
+if [ $# -ne 0 ]
+then
+	echo "clock-gui: too many arguments"
+	exit 1
+fi
+
+konsole 2>/dev/null $kon_opts -e clock

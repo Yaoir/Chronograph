@@ -27,6 +27,9 @@ MANDIR=/usr/local/man/man1
 #MANDIR=/usr/local/share/man/man1
 #MANDIR=/usr/share/man/man1
 
+# Release date
+RELDATE=2018-12-30
+
 all: alarm clock stopwatch timer
 
 alarm: alarm.go
@@ -35,21 +38,28 @@ alarm: alarm.go
 # Make the manual page
 
 alarm-man: alarm.1.ronn
-	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="2018-12-25" alarm.1.ronn > man1/alarm.1
+	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" alarm.1.ronn > man1/alarm.1
 	@gzip -f alarm.1
 	@mv alarm.1.gz man1
-	@man -l man1/alarm.1.gz
-
-# Display the manual page
-
-showman-alarm:
 	@man -l man1/alarm.1.gz
 
 clock: clock.go
 	@go build clock.go
 
+clock-man: clock.1.ronn
+	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" clock.1.ronn > man1/clock.1
+	@gzip -f clock.1
+	@mv clock.1.gz man1
+	@man -l man1/clock.1.gz
+
 stopwatch: stopwatch.go
 	@go build stopwatch.go
+
+stopwatch-man: stopwatch.1.ronn
+	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" stopwatch.1.ronn > man1/stopwatch.1
+	@gzip -f stopwatch.1
+	@mv stopwatch.1.gz man1
+	@man -l man1/stopwatch.1.gz
 
 timer: timer.go
 	@go build timer.go
@@ -59,15 +69,27 @@ test_timer:
 #	./timer 10s echo done
 
 timer-man: timer.1.ronn
-	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="2018-12-25" timer.1.ronn > man1/timer.1
+	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" timer.1.ronn > man1/timer.1
 	@gzip -f timer.1
 	@mv timer.1.gz man1
 	@man -l man1/timer.1.gz
 
-# Display the manual page
+# Display the manual pages
 
-showman-timer:
+alarm-showman:
+	@man -l man1/alarm.1.gz
+
+clock-showman:
+	@man -l man1/clock.1.gz
+
+stopwatch-showman:
 	@man -l man1/timer.1.gz
+
+timer-showman:
+	@man -l man1/timer.1.gz
+
+# timeofday isn't part of the Chronograph programs
+# It doesn't do very much! It just prints the current wall clock time.
 
 timeofday: timeofday.go
 	@go build timeofday.go
@@ -79,4 +101,4 @@ install-man:
 	cp man1/*.1.gz $(MANDIR)
 
 backup back bak:
-	@cp *.go *.ronn *-win README.md Makefile TODO .bak
+	@cp *.go *.ronn *-gui README.md Makefile TODO .bak

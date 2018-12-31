@@ -1,0 +1,44 @@
+stopwatch(1) -- stopwatch
+=========================
+
+## SYNOPSIS
+
+`stopwatch [-p]`
+
+## DESCRIPTION
+
+stopwatch(1) is a stopwatch that runs in a virtual terminal.
+
+It is controlled with keys on the keyboard as follows:
+
+`SPACE, p, P`
+
+	Pause/restart the stopwatch.
+
+`l, L`
+
+	Lap Timer. The current timing is printed, and counting continues on the following line.
+
+`r, R`
+
+	Reset. Works only while paused.
+
+`q, Q, e, E, Ctrl-C, Ctrl-D, Enter/Return`
+
+	Stop the stopwatch and exit.
+
+## ARGUMENTS
+
+When the -p option is specified, the stopwatch starts in the paused state.
+
+## AUTHOR
+
+Jay Ts
+(http://jayts.com)
+
+## COPYRIGHT
+
+Copyright 2018 Jay Ts
+
+Released under the GNU Public License, version 3.0 (GPLv3)
+(http://www.gnu.org/licenses/gpl.html)

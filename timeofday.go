@@ -1,5 +1,7 @@
 package main
 
+// prints local clock time
+
 import (
 	"fmt"
 	"time"
