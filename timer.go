@@ -60,14 +60,15 @@ var final_time time.Time
 var duration time.Duration
 var ticker *time.Ticker
 
-func quit() {
+func quit(code int) {
 	C.tty_reset()
-	os.Exit(0)
+	os.Exit(code)
 }
 
 // get and process a keypress
 
 func do_key() {
+	var code int = 1
 	// wait for any key to be pressed
 	c := byte(C.getbyte())
 
@@ -76,7 +77,8 @@ func do_key() {
 			// stop and exit
 			stop()
 			fmt.Printf("\n")
-			quit()
+			if c == 0x03 || c == 0x04 { code = 2 }
+			quit(code)
 		default:	// ignore any other keypress
 	}
 }
@@ -109,8 +111,9 @@ func stop() {
 	stopped <- true			// notify counter that ticker has stopped
 }
 
-var command_args []string
-var execfile string
+var run_command bool		// true if a command was specified in arguments
+var execfile string		// The command to run.
+var command_args []string	// Arguments of the command.
 
 func count() {
 //
@@ -130,25 +133,30 @@ func count() {
 
 				if time.Now().After(final_time) {
 				//
-					cmd := exec.Command(execfile,command_args...)
-					cmd.Stdout = &out
-					err := cmd.Run()
-					if err != nil { fmt.Printf("err = %v\n",err) }
+					// erase time display
 					fmt.Printf("\r           \r")
-					fmt.Printf("%s", out.String())
-					quit()
+
+					if run_command {
+						cmd := exec.Command(execfile,command_args...)
+						cmd.Stdout = &out
+						err := cmd.Run()
+						if err != nil {
+							fmt.Printf("err = %v\n",err)
+						} else {
+							fmt.Printf("%s", out.String())
+						}
+					}
+					quit(0)
 				}
 		}
 	}
 }
 
 func main() {
-//
 	var err error
 
-	if len(os.Args) < 3 {
-	//
-		fmt.Printf("timer: need arguments\n")
+	if len(os.Args) < 2 {
+		fmt.Printf("timer: need argument(s)\n")
 		os.Exit(2)
 	}
 
@@ -166,19 +174,24 @@ func main() {
 	C.tty_setraw()	// put tty in raw mode (unbuffered)
 	stopped = make(chan bool)
 
-	execfile = os.Args[2]	// program to execute
+	if len(os.Args) > 2 {
+	//
+		run_command = true
 
-	// check that execfile exists in $PATH
+		execfile = os.Args[2]	// program to execute
 
-	_, err = exec.LookPath(execfile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
-		quit()
+		// check that execfile exists in $PATH
+
+		_, err = exec.LookPath(execfile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
+			quit(2)
+		}
+
+		// prepare argument list
+
+		for i := 3; i < len(os.Args); i++ { command_args = append(command_args,os.Args[i]) }
 	}
-
-	// prepare argument list
-
-	for i := 3; i < len(os.Args); i++ { command_args = append(command_args,os.Args[i]) }
 
 	// Run countdown timer
 

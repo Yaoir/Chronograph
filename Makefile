@@ -28,7 +28,7 @@ MANDIR=/usr/local/man/man1
 #MANDIR=/usr/share/man/man1
 
 # Release date
-RELDATE=2018-12-30
+RELDATE=2019-05-21
 
 all: alarm clock stopwatch timer
 

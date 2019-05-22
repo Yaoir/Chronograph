@@ -94,8 +94,9 @@ func time2str(t time.Time) string {
 	return fmt.Sprintf("%0d:%02d:%02d ", t.Hour(), t.Minute(), t.Second())
 }
 
-var command_args []string
-var execfile string
+var run_command bool            // true if a command was specified in arguments
+var execfile string             // The command to run.
+var command_args []string       // Arguments of the command.
 
 func count() {
 //
@@ -114,12 +115,19 @@ func count() {
 
 				if time.Now().After(alarm_time) {
 				//
-					cmd := exec.Command(execfile,command_args...)
-					cmd.Stdout = &out
-					err := cmd.Run()
-					if err != nil { fmt.Printf("err = %v\n",err) }
+					// erase time display
 					fmt.Printf("\r           \r")
-					fmt.Printf("%s", out.String())
+
+					if run_command {
+						cmd := exec.Command(execfile,command_args...)
+						cmd.Stdout = &out
+						err := cmd.Run()
+						if err != nil {
+							fmt.Printf("err = %v\n",err)
+						} else {
+							fmt.Printf("%s", out.String())
+						}
+					}
 					quit()
 				}
 		}
@@ -147,8 +155,7 @@ func main() {
 		"3:04:05PM",
 		}
 		
-	if len(os.Args) < 3 {
-	//
+	if len(os.Args) < 1 {
 		fmt.Printf("alarm: need arguments\n")
 		os.Exit(2)
 	}
@@ -199,19 +206,24 @@ func main() {
 	C.tty_setraw()	// put tty in raw mode (unbuffered)
 	stopped = make(chan bool)
 
-	execfile = os.Args[2]	// program to execute
+	if len(os.Args) > 2 {
+	//
+		run_command = true
 
-	// check that execfile exists in $PATH
+		execfile = os.Args[2]	// program to execute
 
-	_, err = exec.LookPath(execfile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
-		quit()
+		// check that execfile exists in $PATH
+
+		_, err = exec.LookPath(execfile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
+			quit()
+		}
+
+		// prepare argument list
+
+		for i := 3; i < len(os.Args); i++ { command_args = append(command_args,os.Args[i]) }
 	}
-
-	// prepare argument list
-
-	for i := 3; i < len(os.Args); i++ { command_args = append(command_args,os.Args[i]) }
 
 	// Run alarm clock
 

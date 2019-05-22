@@ -38,7 +38,7 @@ Jay Ts
 
 ## COPYRIGHT
 
-Copyright 2018 Jay Ts
+Copyright 2019 Jay Ts
 
 Released under the GNU Public License, version 3.0 (GPLv3)
 (http://www.gnu.org/licenses/gpl.html)

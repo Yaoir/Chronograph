@@ -3,17 +3,19 @@ alarm(1) -- alarm clock
 
 ## SYNOPSIS
 
-`alarm` _time_ _command_
+`alarm` _time_ [ _command_ ]
 
 ## DESCRIPTION
 
-alarm(1) is an alarm clock. It runs a command at a specified time.
+alarm(1) is a command line alarm clock. It displays the time of day until reaching the specified time.
+
+Before exiting, it optionally runs a command.
 
 ## ARGUMENTS
 
 The first argument specifies the time the alarm clock is set to go off.
 
-The rest of the arguments are a command to run when the alarm triggers.
+The rest of the arguments, if present, are treated as a command to run when the alarm triggers.
 
 ## EXAMPLES
 
@@ -33,8 +35,6 @@ Reminder to feed the cat at 10am:
 
 The time is always shown with a 24-hour clock, even when the alarm is set with a 12-hour clock.
 
-The command must be present. Use "echo -n" as the command if you don't want a command to run.
-
 ## AUTHOR
 
 Jay Ts
@@ -42,7 +42,7 @@ Jay Ts
 
 ## COPYRIGHT
 
-Copyright 2018 Jay Ts
+Copyright 2019 Jay Ts
 
 Released under the GNU Public License, version 3.0 (GPLv3)
 (http://www.gnu.org/licenses/gpl.html)
