@@ -157,7 +157,7 @@ func main() {
 
 	if len(os.Args) < 2 {
 		fmt.Printf("timer: need argument(s)\n")
-		os.Exit(2)
+		os.Exit(3)
 	}
 
 	// parse countdown time
@@ -166,7 +166,7 @@ func main() {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr,"timer: bad duration %q\n",os.Args[1])
-		os.Exit(2)
+		os.Exit(3)
 	}
 
 	final_time = time.Now().Add(duration)
@@ -185,7 +185,7 @@ func main() {
 		_, err = exec.LookPath(execfile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
-			quit(2)
+			quit(3)
 		}
 
 		// prepare argument list

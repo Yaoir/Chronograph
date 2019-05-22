@@ -1,6 +1,6 @@
 #### News: May 2019 Update
 
-Providing a command to run is now optional for the __timer__ and __alarm__ programs. This was done because I found __timer__ to be a useful replacement for __sleep(1)__. Instead of just pausing, __timer__ displays the time remaining. For example:
+Providing a command to run is now optional for the __timer__ and __alarm__ programs. This was done because I found __timer__ to be a useful replacement for __sleep(1)__. Instead of just pausing, __timer__ also displays the time remaining. For example:
 
 ```
 for num in 1 2 3
@@ -12,11 +12,12 @@ done
 
 A few late additions to the documentation:
 
-__timer__ exit codes:
+__timer__ exit codes 1 and 2:
 ```
-1 if quit by user
-2 if quit by Control-C
-3 if other error
+0 Normal command exit (timer reached 0)
+1 Quit by user (with `q` key)
+2 Quit by Control-C or SIGKILL
+3 Error (bad arguments)
 ```
 This is to make __timer__ more useful in scripts. While the timer is running, you can type either a `q` or `Control-C` to quit, resulting in a different exit code. In the script, inspect the error code and handle the condition appropriately.
 
