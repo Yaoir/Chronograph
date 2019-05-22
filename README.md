@@ -1,5 +1,7 @@
 #### News: May 2019 Update
 
+###### Running commands
+
 Providing a command to run is now optional for the __timer__ and __alarm__ programs. This was done because I found __timer__ to be a useful replacement for __sleep(1)__. Instead of just pausing, __timer__ also displays the time remaining. For example:
 
 ```
@@ -10,16 +12,24 @@ do
 done
 ```
 
-A few late additions to the documentation:
+Under consideration is the idea of deprecating having commands run by __alarm__ or __timer__, and subsequently removing the feature entirely. Support for running a command when the alarm or timer triggered seemed like a good idea initially because that is the way single purpose alarm clocks and kitchen timers operate. In practice, it works better to use the shell's ability to tie commands together to add functionality, as in these examples:
 
-__timer__ exit codes 1 and 2:
+$ alarm 2:34pm; echo "Time to get ready for the interview!"
+
+$ timer 20m && echo "Time to take a short break!"
+
+The first example runs the __echo__ program no matter how __alarm__ exited, and the second runs the command only if the timer counted all the way down to zero.
+
+###### Exit codes
+
+__alarm__ and __timer__ exit codes now mean the following:
 ```
 0 Normal command exit (timer reached 0)
 1 Quit by user (with `q` key)
 2 Quit by Control-C or SIGKILL
 3 Error (bad arguments)
 ```
-This is to make __timer__ more useful in scripts. While the timer is running, you can type either a `q` or `Control-C` to quit, resulting in a different exit code. In the script, inspect the error code and handle the condition appropriately.
+This is to make __alarm__ and __timer__ more useful in scripts. While the clock is running, you can type either a `q` or `Control-C` to quit, resulting in a different exit code. In the script, inspect the error code and handle the condition appropriately.
 
 For example, a `q` might result in the timer ending early while allowing the script to continue running, but a `Control-C` would cause the script to exit with an error condition:
 
@@ -32,7 +42,13 @@ then
 fi
 ```
 
+##### A few late additions to the documentation:
+
+###### Using the programs as GUI apps
+
 The distribution includes shell scripts __alarm-gui__, __clock-gui__, __stopwatch-gui__, and __timer-gui__ as examples of how to run the programs within a virtual terminal so they act more like GUI apps. They all depend on __konsole(1)__ for the virtual terminal. You will need to modify them if you want to use another virtual terminal.
+
+###### Makefile functions - installation
 
 The included __Makefile__ contains rules for installing the programs, __*program*-gui__ shell scripts, and manual pages. Set the variables __BINDIR__, __SSDIR__, and __MANDIR__ in __Makefile__ appropriately before running one of
 
@@ -41,11 +57,14 @@ make install
 ```
 and/or
 ```
+make install-ss
+```
+and/or
+```
 make install-man
 ```
 
-to install the programs and/or manual pages, respectively.
-
+to install the programs, shell scripts, and/or manual pages, respectively.
 
 ### Introduction
 

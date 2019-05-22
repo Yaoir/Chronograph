@@ -13,7 +13,7 @@
 kon_opts="--hold --profile Timer --hide-menubar --hide-tabbar -p ScrollBarPosition=2 -p TerminalRows=2 -p TerminalColumns=13"
 # --hold keeps the terminal window open after the command exits.
 
-if [ $# -lt 2 ]
+if [ $# -lt 1 ]
 then
 	echo "timer-gui: need arguments"
 	exit 1

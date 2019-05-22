@@ -60,9 +60,9 @@ var segment_time time.Duration
 // total_time is like an odometer. It stores all of the time measured
 var total_time time.Duration
 
-func quit() {
+func quit(code int) {
 	C.tty_reset()
-	os.Exit(0)
+	os.Exit(code)
 }
 
 var paused bool
@@ -70,6 +70,7 @@ var paused bool
 // get and process a keypress
 
 func do_key() {
+	var code int = 1
 	// wait for any key to be pressed
 	c := byte(C.getbyte())
 
@@ -93,7 +94,8 @@ func do_key() {
 			// stop and exit
 			if ! paused { stop() }
 			fmt.Printf("\n")
-			quit()
+			if c == 0x03 || c == 0x04 { code = 2 }
+			quit(code)
 		case 'l', 'L':
 			// lap time
 			fmt.Printf("\n")

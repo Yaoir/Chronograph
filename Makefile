@@ -95,7 +95,10 @@ timeofday: timeofday.go
 	@go build timeofday.go
 
 install:
-	@cp alarm clock stopwatch timer $(BINDIR)
+	cp alarm clock stopwatch timer $(BINDIR)
+
+install-ss:
+	cp alarm-gui clock-gui stopwatch-gui timer-gui $(SSDIR)
 
 install-man:
 	cp man1/*.1.gz $(MANDIR)

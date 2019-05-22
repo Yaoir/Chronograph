@@ -55,14 +55,15 @@ import (
 
 var ticker *time.Ticker
 
-func quit() {
+func quit(code int) {
 	C.tty_reset()
-	os.Exit(0)
+	os.Exit(code)
 }
 
 // get and process a keypress
 
 func do_key() {
+	var code int = 1
 	// wait for any key to be pressed
 	c := byte(C.getbyte())
 
@@ -71,7 +72,8 @@ func do_key() {
 			// stop and exit
 			stop()
 			fmt.Printf("\n")
-			quit()
+			if c == 0x03 || c == 0x04 { code = 2 }
+			quit(code)
 		default:	// ignore any other keypress
 	}
 }
@@ -128,7 +130,7 @@ func count() {
 							fmt.Printf("%s", out.String())
 						}
 					}
-					quit()
+					quit(0)
 				}
 		}
 	}
@@ -157,7 +159,7 @@ func main() {
 		
 	if len(os.Args) < 1 {
 		fmt.Printf("alarm: need arguments\n")
-		os.Exit(2)
+		os.Exit(3)
 	}
 
 	now = time.Now()
@@ -186,7 +188,7 @@ func main() {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr,"alarm: bad alarm setting %q\n",os.Args[1])
-		os.Exit(2)
+		os.Exit(3)
 	}
 
 	// and take these from the argument:
@@ -200,7 +202,7 @@ func main() {
 	if now.After(alarm_time) {
 	//
 		fmt.Fprintf(os.Stderr,"The specified time has already passed\n")
-		os.Exit(1)
+		os.Exit(3)
 	}
 
 	C.tty_setraw()	// put tty in raw mode (unbuffered)
@@ -217,7 +219,7 @@ func main() {
 		_, err = exec.LookPath(execfile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
-			quit()
+			quit(3)
 		}
 
 		// prepare argument list
