@@ -1,10 +1,14 @@
-TODO: Linux/POSIX, due to Cgo
+#### TODO 
 
-TODO: Using the programs as GUI apps
+These topics are not yet properly documented:
+
+Linux/POSIX, due to Cgo
+
+Using the programs as GUI apps
 
 The distribution includes shell scripts __alarm-gui__, __clock-gui__, __stopwatch-gui__, and __timer-gui__ as examples of how to run the programs within a virtual terminal so they act more like GUI apps. They all depend on __konsole(1)__ for the virtual terminal. You will need to modify them if you want to use another virtual terminal.
 
-TODO: Makefile functions - installation
+Makefile functions - installation
 
 The included __Makefile__ contains rules for installing the programs, __*program*-gui__ shell scripts, and manual pages. Set the variables __BINDIR__, __SSDIR__, and __MANDIR__ in __Makefile__ appropriately before running one of
 
@@ -21,7 +25,6 @@ make install-man
 ```
 
 to install the programs, shell scripts, and/or manual pages, respectively.
-==============================================================================
 
 ### Introduction
 
