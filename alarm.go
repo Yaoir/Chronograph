@@ -46,10 +46,8 @@ package main
 import "C"
 
 import (
-	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
 	"time"
 	)
 
@@ -94,9 +92,7 @@ func stop() {
 // back up over the time string and print a new one over it.
 
 func eraseprint(len int, s string) {
-	for i := 0; i < len; i++ {
-		fmt.Printf("\b")
-	}
+	for i := 0; i < len; i++ { fmt.Printf("\b") }
 	fmt.Printf("%s",s)
 }
 
@@ -105,15 +101,10 @@ func time2str(t time.Time) string {
 	return fmt.Sprintf("%0d:%02d:%02d ", t.Hour(), t.Minute(), t.Second())
 }
 
-var run_command bool            // true if a command was specified in arguments
-var execfile string             // The command to run.
-var command_args []string       // Arguments of the command.
 var prev string
 
 func count() {
-//
 	var this string
-	var out bytes.Buffer
 
 	for {
 		select {
@@ -122,26 +113,13 @@ func count() {
 			case t := <- ticker.C:
 				this = time2str(t)
 				// Print only if the string has changed since last time
-//				if this != prev { fmt.Printf("\r%s",this) }
 				if this != prev { eraseprint(len(prev),this) }
 				prev = this
 
 				if time.Now().After(alarm_time) {
 				//
 					// erase time display
-//					fmt.Printf("\r           \r")
 					eraseprint(len(prev),"           \r")
-
-					if run_command {
-						cmd := exec.Command(execfile,command_args...)
-						cmd.Stdout = &out
-						err := cmd.Run()
-						if err != nil {
-							fmt.Printf("err = %v\n",err)
-						} else {
-							fmt.Printf("%s", out.String())
-						}
-					}
 					quit(0)
 				}
 		}
@@ -151,7 +129,6 @@ func count() {
 var alarm_time time.Time	// full time/date for alarm
 
 func main() {
-//
 	var err error
 	var now time.Time		// current time, from system clock 
 	var input_time time.Time	// alarm setting, from argument
@@ -169,8 +146,8 @@ func main() {
 		"3:04:05PM",
 		}
 		
-	if len(os.Args) < 2 {
-		fmt.Printf("alarm: need arguments\n")
+	if len(os.Args) != 2 {
+		fmt.Printf("usage: alarm <time>\n")
 		os.Exit(3)
 	}
 
@@ -220,28 +197,8 @@ func main() {
 	C.tty_setraw()	// put tty in raw mode (unbuffered)
 	stopped = make(chan bool)
 
-	if len(os.Args) > 2 {
-	//
-		run_command = true
-
-		execfile = os.Args[2]	// program to execute
-
-		// check that execfile exists in $PATH
-
-		_, err = exec.LookPath(execfile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr,"Cannot find command %s\n",execfile)
-			quit(3)
-		}
-
-		// prepare argument list
-
-		for i := 3; i < len(os.Args); i++ { command_args = append(command_args,os.Args[i]) }
-	}
-
 	// Run alarm clock
 
-//	fmt.Printf("%s",time2str(time.Now()))	// initial display: "hh:mm:ss.d "
 	prev = time2str(time.Now())
 	fmt.Printf("%s",prev)	// initial display: "hh:mm:ss.d "
 

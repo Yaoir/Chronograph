@@ -7,13 +7,21 @@ clock(1) -- clock
 
 ## DESCRIPTION
 
-clock(1) is a command-line clock that runs in a virtual terminal. It displays the running wall clock time and is accurate to about 1/10 second.
+clock(1) is a command-line clock. It displays the running wall clock time and is accurate to about 1/10 second.
 
-Type a Control-C to exit.
+Type a 'q', 'Q', or Control-C to exit.
 
 ## ARGUMENTS
 
 None.
+
+## EXIT VALUES
+
+```
+1 Quit by user (with q key)
+2 Quit by Control-C or SIGKILL
+3 Error (bad arguments)
+```
 
 ## BUGS
 

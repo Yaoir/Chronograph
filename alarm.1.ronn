@@ -3,33 +3,81 @@ alarm(1) -- alarm clock
 
 ## SYNOPSIS
 
-`alarm` _time_ [ _command_ ]
+`alarm` _time_
 
 ## DESCRIPTION
 
 alarm(1) is a command line alarm clock. It displays the time of day until reaching the specified time.
 
-Before exiting, it optionally runs a command.
-
 ## ARGUMENTS
 
-The first argument specifies the time the alarm clock is set to go off.
+The argument specifies the time that **alarm** exits. The following formats may be used:
 
-The rest of the arguments, if present, are treated as a command to run when the alarm triggers.
+```
+Exactly on the hour:
+
+3pm
+3PM
+15
+
+Exactly on the minute:
+
+3:04pm
+3:04PM
+15:04
+
+Exactly on the second:
+
+3:04:05pm
+3:04:05PM
+15:04:05
+```
 
 ## EXAMPLES
 
 An alarm set to play an mp3 (with the command `aplay alarmbell.mp3`) at 2:30 pm (14:30):
 
-`alarm 2:30pm aplay alarmbell.mp3`
+`alarm 2:30pm && aplay alarmbell.mp3`
 
 An alarm set to print "hello, world" at 9 pm (21:00):
 
-`alarm 21:00 echo "hello, world"`
+`alarm 21:00 && echo "hello, world"`
 
 Reminder to feed the cat at 10am:
 
-`alarm 10am echo feed the cat`
+`alarm 10am && echo feed the cat`
+
+## EXIT VALUES
+
+```
+0 Normal command exit (reached alarm time)
+1 Quit by user (with q or Q key)
+2 Quit by Control-C or SIGKILL
+3 Error (bad arguments)
+```
+
+When using **alarm** in loop in a shell script, use this code to have the script exit when **alarm** is interrupted, either with a **q** or **Q** keypress, or a Control-C or SIGKILL from another source:
+
+```
+alarm 1pm
+# exit if interrupted
+if [ $? -ne 0 ]
+then
+    exit 1
+fi
+```
+
+The following causes the shell script to exit if it receives an interrupt signal (Control-C), but if the user types a **q** or **Q**, **alarm** will quit early, and the loop inside the shell script will continue to execute:
+
+```
+alarm 2pm
+# ignore user quit with q or Q key,
+# but exit if interrupted with SIGKILL (Control-C)
+if [ $? -eq 2 ]
+then
+    exit 1
+fi
+```
 
 ## BUGS
 

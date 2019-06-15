@@ -90,7 +90,6 @@ func do_key() {
 			if ! paused { return }	// enabled only while paused
 			total_time = 0
 			segment_time = 0
-//			fmt.Printf("\r%s",dur2str(total_time))	// zero display: "00:00:00.0 "
 			this = dur2str(total_time)
 			eraseprint(len(prev),this)
 			prev = this
@@ -160,7 +159,6 @@ func count() {
 				segment_time = t.Sub(start_time)
 				this = dur2str(total_time+segment_time)
 				// Print only if the string has changed since last time
-//				if this != prev { fmt.Printf("\r%s",this) }
 				if this != prev { eraseprint(len(prev),this) }
 				prev = this
 		}
@@ -168,13 +166,20 @@ func count() {
 }
 
 func main() {
-//
+	if len(os.Args) > 2 {
+		fmt.Printf("stopwatch: bad arguments\n")
+		os.Exit(3)
+	}
+
 	C.tty_setraw()	// put tty in raw mode (unbuffered)
 	stopped = make(chan bool)
 	start_paused := flag.Bool("p",false,"start paused")
 	flag.Parse()
 	paused = *start_paused
-//	fmt.Printf("%s",dur2str(total_time))	// initial display: "00:00:00.0 "
+	if ! paused && len(os.Args) > 1 {
+		fmt.Printf("stopwatch: bad arguments\n")
+		quit(3)
+	}
 	prev = dur2str(total_time)
 	fmt.Printf("%s",prev)	// initial display: "hh:mm:ss.d "
 

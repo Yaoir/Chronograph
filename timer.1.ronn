@@ -3,29 +3,75 @@ timer(1) -- countdown timer
 
 ## SYNOPSIS
 
-`timer` _duration_ [ _command_ ]
+`timer` _duration_
 
 ## DESCRIPTION
 
-timer(1) is a countdown timer. It runs an optional command after a specified duration of time.
+timer(1) is a countdown timer.
 
-While the timer is running, the remaining time is displayed.
+While the timer is running, the remaining time is displayed. The command exits when the time remaining reaches 0.
 
 ## ARGUMENTS
 
-The first argument specifies the duration.
+The argument specifies the duration. Some examples of valid arguments follows:
 
-If additional arguments are supplied, they are treated as a command to run when the timer reaches 0.
+```
+5s        Five seconds
+22.9s     Twenty-two and 9/10 seconds
+179s      179 seconds (or two minutes and 59 seconds)
+7m        Seven minutes
+32m30s    32½ minutes
+1h45m     One hour and 45 minutes
+2h56m4s   Two hours, 56 minutes, and 4 seconds
+5h        Five hours
+100h      One hundred hours
+```
 
 ## EXAMPLES
 
+Pause for 5 seconds, showing the countdown:
+
+`timer 5s`
+
 After 2 minutes and 30 seconds, play an mp3 (with the command `aplay alarmbell.mp3`):
 
-`timer 2m30s aplay alarmbell.mp3`
+`timer 2m30s && aplay alarmbell.mp3`
 
 Print "hello, world" after waiting 21 minutes:
 
-`timer 21m echo "hello, world"`
+`timer 21m && echo "hello, world"`
+
+## EXIT VALUES
+
+```
+0 Normal command exit (timer reached 0)
+1 Quit by user (with q key)
+2 Quit by Control-C or SIGKILL
+3 Error (bad arguments)
+```
+
+When using **timer** in loop in a shell script, use this code to have the script exit when the timer is interrupted, either with a **q** or **Q** keypress, or a Control-C or SIGKILL from another source:
+
+```
+timer 600s
+# exit if interrupted
+if [ $? -ne 0 ]
+then
+    exit 1
+fi
+```
+
+The following causes the shell script to exit if it receives an interrupt signal (Control-C), but if the user types a **q** or **Q**, **timer** will quit early, and the loop inside the shell script will continue to execute:
+
+```
+timer 600s
+# ignore user quit with q or Q key,
+# but exit if interrupted with SIGKILL (Control-C)
+if [ $? -eq 2 ]
+then
+    exit 1
+fi
+```
 
 ## BUGS
 

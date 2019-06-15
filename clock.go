@@ -69,7 +69,6 @@ func do_key() {
 		case 'q', 'Q', 'e', 'E', 0x03, 0x04:	// q, e, Ctrl-C, Ctrl-D
 			// stop and exit
 			stop()
-//			fmt.Printf("\n")
 			eraseprint(len(prev),"           \r")
 			if c == 0x03 || c == 0x04 { code = 2 }
 			quit(code)
@@ -107,7 +106,6 @@ func time2str(t time.Time) string {
 var prev string
 
 func count() {
-//
 	var this string
 
 	for {
@@ -124,7 +122,6 @@ func count() {
 }
 
 func main() {
-//
 	if len(os.Args) > 1 {
 		fmt.Printf("clock: bad arguments\n")
 		os.Exit(3)

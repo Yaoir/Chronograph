@@ -4,6 +4,7 @@
 # with any Unix/POSIX-compatible make program
 #
 # Requirements:
+#	Linux/POSIX only. Uses Cgo.
 #	Compile (build): You must have Go installed.
 #	To make and view the manual page: ronn, gzip, man
 
@@ -87,12 +88,6 @@ stopwatch-showman:
 
 timer-showman:
 	@man -l man1/timer.1.gz
-
-# timeofday isn't part of the Chronograph programs
-# It doesn't do very much! It just prints the current wall clock time.
-
-timeofday: timeofday.go
-	@go build timeofday.go
 
 install:
 	cp alarm clock stopwatch timer $(BINDIR)

@@ -1,24 +1,4 @@
-#### News: May 2019 Update
-
-###### Running commands
-
-Providing a command to run is now optional for the __timer__ and __alarm__ programs. This was done because I found __timer__ to be a useful replacement for __sleep(1)__. Instead of just pausing, __timer__ also displays the time remaining. For example:
-
-```
-for num in 1 2 3
-do
-	echo $num
-	timer 5s
-done
-```
-
-Under consideration is the idea of deprecating having commands run by __alarm__ or __timer__, and subsequently removing the feature entirely. Support for running a command when the alarm or timer triggered seemed like a good idea initially because that is the way single purpose alarm clocks and kitchen timers operate. In practice, it works better to use the shell's ability to tie commands together to add functionality, as in these examples:
-
-$ alarm 2:34pm; echo "Time to get ready for the interview!"
-
-$ timer 20m && echo "Time to take a short break!"
-
-The first example runs the __echo__ program no matter how __alarm__ exited, and the second runs the command only if the timer counted all the way down to zero.
+#### News: June 2019 Update
 
 ###### Exit codes
 

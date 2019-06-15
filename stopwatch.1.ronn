@@ -31,6 +31,14 @@ It is controlled with keys on the keyboard as follows:
 
 When the -p option is specified, the stopwatch starts in the paused state.
 
+## EXIT VALUES
+
+```
+1 Quit by user (with q key)
+2 Quit by Control-C or SIGKILL
+3 Error (bad arguments)
+```
+
 ## AUTHOR
 
 Jay Ts
