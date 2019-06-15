@@ -111,13 +111,23 @@ func stop() {
 	stopped <- true			// notify counter that ticker has stopped
 }
 
+// back up over the time string and print a new one over it.
+
+func eraseprint(len int, s string) {
+	for i := 0; i < len; i++ {
+		fmt.Printf("\b")
+	}
+	fmt.Printf("%s",s)
+}
+
 var run_command bool		// true if a command was specified in arguments
 var execfile string		// The command to run.
 var command_args []string	// Arguments of the command.
+var prev string
 
 func count() {
 //
-	var this, prev string
+	var this string
 	var out bytes.Buffer
 
 	for {
@@ -128,13 +138,15 @@ func count() {
 				rem := final_time.Sub(t)
 				this = dur2str(rem)
 				// Print only if the string has changed since last time
-				if this != prev && rem.Seconds() >= 0.0 { fmt.Printf("\r%s",this) }
+//				if this != prev && rem.Seconds() >= 0.0 { fmt.Printf("\r%s",this) }
+				if this != prev && rem.Seconds() >= 0.0 { eraseprint(len(prev),this) }
 				prev = this
 
 				if time.Now().After(final_time) {
 				//
 					// erase time display
-					fmt.Printf("\r           \r")
+//					fmt.Printf("\r           \r")
+					eraseprint(len(prev),"           \r")
 
 					if run_command {
 						cmd := exec.Command(execfile,command_args...)
@@ -195,7 +207,8 @@ func main() {
 
 	// Run countdown timer
 
-	fmt.Printf("%s",dur2str(duration))	// initial display: "hh:mm:ss.d "
+	prev = dur2str(duration)
+	fmt.Printf("%s",prev)	// initial display: "hh:mm:ss.d "
 
 	start()			// start measuring/displaying running time
 	for { do_key() }	// event loop: handle key presses

@@ -71,6 +71,7 @@ var paused bool
 
 func do_key() {
 	var code int = 1
+	var this string
 	// wait for any key to be pressed
 	c := byte(C.getbyte())
 
@@ -89,7 +90,10 @@ func do_key() {
 			if ! paused { return }	// enabled only while paused
 			total_time = 0
 			segment_time = 0
-			fmt.Printf("\r%s",dur2str(total_time))	// zero display: "00:00:00.0 "
+//			fmt.Printf("\r%s",dur2str(total_time))	// zero display: "00:00:00.0 "
+			this = dur2str(total_time)
+			eraseprint(len(prev),this)
+			prev = this
 		case '\r', 'q', 'Q', 'e', 'E', 0x03, 0x04:	// Enter/Return, q, e, Ctrl-C, Ctrl-D
 			// stop and exit
 			if ! paused { stop() }
@@ -135,8 +139,19 @@ func stop() {
 	segment_time = 0		// reset segment counter
 }
 
+// back up over the time string and print a new one over it.
+
+func eraseprint(len int, s string) {
+	for i := 0; i < len; i++ {
+		fmt.Printf("\b")
+	}
+	fmt.Printf("%s",s)
+}
+
+var prev string
+
 func count() {
-	var this, prev string
+	var this string
 	for {
 		select {
 			case <-stopped:
@@ -145,7 +160,8 @@ func count() {
 				segment_time = t.Sub(start_time)
 				this = dur2str(total_time+segment_time)
 				// Print only if the string has changed since last time
-				if this != prev { fmt.Printf("\r%s",this) }
+//				if this != prev { fmt.Printf("\r%s",this) }
+				if this != prev { eraseprint(len(prev),this) }
 				prev = this
 		}
 	}
@@ -158,7 +174,10 @@ func main() {
 	start_paused := flag.Bool("p",false,"start paused")
 	flag.Parse()
 	paused = *start_paused
-	fmt.Printf("%s",dur2str(total_time))	// initial display: "00:00:00.0 "
+//	fmt.Printf("%s",dur2str(total_time))	// initial display: "00:00:00.0 "
+	prev = dur2str(total_time)
+	fmt.Printf("%s",prev)	// initial display: "hh:mm:ss.d "
+
 	if ! paused { start() }	// start measuring/displaying running time (presses stopwatch's start button)
 	// event loop: handle key presses
 	for { do_key() }

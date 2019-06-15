@@ -91,6 +91,15 @@ func stop() {
 	stopped <- true			// notify counter that ticker has stopped
 }
 
+// back up over the time string and print a new one over it.
+
+func eraseprint(len int, s string) {
+	for i := 0; i < len; i++ {
+		fmt.Printf("\b")
+	}
+	fmt.Printf("%s",s)
+}
+
 func time2str(t time.Time) string {
 //
 	return fmt.Sprintf("%0d:%02d:%02d ", t.Hour(), t.Minute(), t.Second())
@@ -99,10 +108,11 @@ func time2str(t time.Time) string {
 var run_command bool            // true if a command was specified in arguments
 var execfile string             // The command to run.
 var command_args []string       // Arguments of the command.
+var prev string
 
 func count() {
 //
-	var this, prev string
+	var this string
 	var out bytes.Buffer
 
 	for {
@@ -112,13 +122,15 @@ func count() {
 			case t := <- ticker.C:
 				this = time2str(t)
 				// Print only if the string has changed since last time
-				if this != prev { fmt.Printf("\r%s",this) }
+//				if this != prev { fmt.Printf("\r%s",this) }
+				if this != prev { eraseprint(len(prev),this) }
 				prev = this
 
 				if time.Now().After(alarm_time) {
 				//
 					// erase time display
-					fmt.Printf("\r           \r")
+//					fmt.Printf("\r           \r")
+					eraseprint(len(prev),"           \r")
 
 					if run_command {
 						cmd := exec.Command(execfile,command_args...)
@@ -157,7 +169,7 @@ func main() {
 		"3:04:05PM",
 		}
 		
-	if len(os.Args) < 1 {
+	if len(os.Args) < 2 {
 		fmt.Printf("alarm: need arguments\n")
 		os.Exit(3)
 	}
@@ -229,7 +241,9 @@ func main() {
 
 	// Run alarm clock
 
-	fmt.Printf("%s",time2str(time.Now()))	// initial display: "hh:mm:ss.d "
+//	fmt.Printf("%s",time2str(time.Now()))	// initial display: "hh:mm:ss.d "
+	prev = time2str(time.Now())
+	fmt.Printf("%s",prev)	// initial display: "hh:mm:ss.d "
 
 	start()			// start measuring/displaying running time
 	for { do_key() }	// event loop: handle key presses
