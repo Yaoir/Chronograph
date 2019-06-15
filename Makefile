@@ -16,27 +16,39 @@ BINDIR=/home/jay/.bin/elf
 #BINDIR=/usr/local/bin
 #BINDIR=/usr/bin
 
-# 2. Where to install the shell scripts:
-SSDIR=/home/jay/.bin
-# Or perhaps one of:
-#SSDIR=/usr/local/bin
-#SSDIR=/usr/bin
-
-# 3. Where to install the manual page:
+# 2. Where to install the manual page:
 MANDIR=/usr/local/man/man1
 # or maybe one of:
 #MANDIR=/usr/local/share/man/man1
 #MANDIR=/usr/share/man/man1
 
-# Release date
+# 3. Where to install the shell scripts:
+SSDIR=/home/jay/.bin
+# Or perhaps one of:
+#SSDIR=/usr/local/bin
+#SSDIR=/usr/bin
+
+# Release date (Used for building the manual pages)
 RELDATE=2019-06-15
 
-all: alarm clock stopwatch timer
+# The compiled programs
+PROGS=alarm clock stopwatch timer
+
+# The below are from building of manual pages
+MANP=man1/alarm.1.gz man1/clock.1 man1/clock.1.gz man1/stopwatch.1 man1/stopwatch.1.gz man1/timer.1.gz
+
+all: $(PROGS)
+
+man:
+	make alarm-man
+	make clock-man
+	make stopwatch-man
+	make timer-man
 
 alarm: alarm.go
 	@go build alarm.go
 
-# Make the manual page
+# Build the manual page
 
 alarm-man: alarm.1.ronn
 	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" alarm.1.ronn > man1/alarm.1
@@ -64,10 +76,6 @@ stopwatch-man: stopwatch.1.ronn
 
 timer: timer.go
 	@go build timer.go
-
-test_timer:
-	@timer 10s paplay /home/jay/.bin/audio/cup.wav
-#	./timer 10s echo done
 
 timer-man: timer.1.ronn
 	@ronn --roff --manual="User Commands" --organization="Jay Ts" --date="$(RELDATE)" timer.1.ronn > man1/timer.1
@@ -97,6 +105,9 @@ install-ss:
 
 install-man:
 	cp man1/*.1.gz $(MANDIR)
+
+clean:
+	rm -f $(PROGS) $(MANP)
 
 backup back bak:
 	@cp *.go *.ronn *-gui README.md Makefile TODO .bak

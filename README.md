@@ -1,49 +1,32 @@
-#### TODO 
-
-These topics are not yet properly documented:
-
-Linux/POSIX, due to Cgo
-
-Using the programs as GUI apps
-
-The distribution includes shell scripts __alarm-gui__, __clock-gui__, __stopwatch-gui__, and __timer-gui__ as examples of how to run the programs within a virtual terminal so they act more like GUI apps. They all depend on __konsole(1)__ for the virtual terminal. You will need to modify them if you want to use another virtual terminal.
-
-Makefile functions - installation
-
-The included __Makefile__ contains rules for installing the programs, __*program*-gui__ shell scripts, and manual pages. Set the variables __BINDIR__, __SSDIR__, and __MANDIR__ in __Makefile__ appropriately before running one of
-
-```
-make install
-```
-and/or
-```
-make install-ss
-```
-and/or
-```
-make install-man
-```
-
-to install the programs, shell scripts, and/or manual pages, respectively.
-
 ### Introduction
 
-Chronograph is a group of command line programs that implement functions found in a chronograph watch.
+Chronograph is a group of four command line programs that implement functions found in a chronograph watch.
 
 The programs are:
 
-```
-alarm - alarm clock
-clock - wall clock
-stopwatch - stopwatch
-timer - countdown timer
-```
+**alarm** - alarm clock
+
+![alarm](images/alarm.png)
+
+**clock** - time-of-day clock
+
+![clock](images/clock.png)
+
+**stopwatch** - stopwatch with pause, reset, and lap functions
+
+![stopwatch](images/stopwatch.png)
+
+**timer** - countdown timer
+
+![timer](images/timer.png)
 
 ### Quick Start
 
+All of the programs are written in Go and use Cgo. They were developed on Linux and may work on macOS, but not on Windows.
+
 In the example commands, `$` is used to indicate a shell prompt.
 
-Compile:
+#### Compile
 
 ```
 $ go build alarm.go
@@ -56,7 +39,7 @@ or if you have GNU make installed:
 $ make
 ```
 
-Run:
+#### Run
 
 ```
 $ clock
@@ -64,6 +47,26 @@ $ stopwatch
 $ timer 10s
 $ alarm <clock_time>
 ```
+
+See the manual pages (included below) for details.
+
+## Installation
+
+The included __Makefile__ contains rules for installing the programs and manual pages. Set the variables __BINDIR__ and __MANDIR__ in __Makefile__ appropriately before running one of
+
+```
+make install
+```
+and/or
+```
+make install-man
+```
+
+to install the programs and/or manual pages, respectively.
+
+## Using the Programs as GUI Apps
+
+The distribution includes shell scripts __alarm-gui__, __clock-gui__, __stopwatch-gui__, and __timer-gui__ as examples of how to run the programs within a virtual terminal so they act more like GUI apps. They all depend on __konsole(1)__ for the virtual terminal. You will need to modify the scripts if you want to use another virtual terminal.
 
 ### Manual Pages
 
