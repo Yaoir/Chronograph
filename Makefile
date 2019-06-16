@@ -36,6 +36,7 @@ PROGS=alarm clock stopwatch timer
 
 # The below are from building of manual pages
 MANP=man1/alarm.1.gz man1/clock.1 man1/clock.1.gz man1/stopwatch.1 man1/stopwatch.1.gz man1/timer.1.gz
+MANP1=man1/alarm.1 man1/clock.1 man1/stopwatch.1 man1/timer.1
 
 all: $(PROGS)
 
@@ -107,7 +108,7 @@ install-man:
 	cp man1/*.1.gz $(MANDIR)
 
 clean:
-	rm -f $(PROGS) $(MANP)
+	rm -f $(PROGS) $(MANP1)
 
 backup back bak:
 	@cp *.go *.ronn *-gui README.md Makefile TODO .bak
